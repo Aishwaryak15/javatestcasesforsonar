@@ -139,6 +139,6 @@ jobs:
           kubectl get nodes
           kubectl delete ns aish || true
           kubectl create ns aish
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
+          kubectl apply -f deployment.yaml -n aish
+          kubectl apply -f service.yaml -n aish
           kubectl get pods -n aish
