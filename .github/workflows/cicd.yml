@@ -139,6 +139,7 @@ jobs:
           kubectl get nodes
           kubectl delete ns aish || true
           kubectl create ns aish
-          kubectl apply -f javatestcasesforsonar/manifests/deployment.yaml -n aish
+          git clone https://github.com/Aishwaryak15/javatestcasesforsonar.git
+          kubectl apply -f manifests/deployment.yaml -n aish
           kubectl apply -f manifests/service.yaml -n aish
           kubectl get pods -n aish
