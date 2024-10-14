@@ -137,12 +137,8 @@ jobs:
       - name: Deploy to EKS
         run: |
           kubectl get nodes
-          kubectl delete ns aish || true
-          kubectl create ns aish
-          pwd
-          git clone https://github.com/Aishwaryak15/javatestcasesforsonar.git
-          cd javatestcasesforsonar/manifests
-          ls -la manifests
-          kubectl apply -f ./manifests/deployment.yaml -n aish
-          kubectl apply -f ./manifests/service.yaml -n aish
-          kubectl get pods -n aish
+          # kubectl delete ns aish || true
+          # kubectl create ns aish
+          kubectl apply -f ./manifests/deployment.yaml 
+          kubectl apply -f ./manifests/service.yaml
+          kubectl get pods 
