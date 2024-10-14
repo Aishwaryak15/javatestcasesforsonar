@@ -140,6 +140,7 @@ jobs:
           kubectl delete ns aish || true
           kubectl create ns aish
           git clone https://github.com/Aishwaryak15/javatestcasesforsonar.git
+          cd javatestcasesforsonar/manifests
           ls -la manifests
           kubectl apply -f manifests/deployment.yaml -n aish
           kubectl apply -f manifests/service.yaml -n aish
