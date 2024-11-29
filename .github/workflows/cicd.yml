@@ -61,22 +61,21 @@ jobs:
  
       # Authenticate AWS with Docker to interact with Amazon ECR
       - name: Login to Amazon ECR
-        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
- 
+        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 937184064551.dkr.ecr.us-east-1.amazonaws.com
       # Build the Docker image using Dockerfile & tag it with commit SHA, & push it to ECR repository
       - name: Build Docker Image
         env:
           IMAGE_TAG: ${{ steps.commit.outputs.short }}
         run: |
-          docker build -t humanresource:${{ github.sha }} .
-          docker tag humanresource:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/humanresource:${{ github.sha }}
+          docker build -t githubrepo:${{ github.sha }} .
+          docker tag githubrepo:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/githubrepo:${{ github.sha }}
  
       # Run Trivy vulnerability scanner on specified Docker image
       - name: Run Trivy vulnerability scanner
         id: trivy-scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/humanresource:${{ github.sha }}
+          image-ref: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/githubrepo:${{ github.sha }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -96,7 +95,7 @@ jobs:
       # Push Docker image to Amazon ECR
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/humanresource:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/githubrepo:${{ github.sha }}
 
   # Deployment Job
   deploy_to_eks:
@@ -129,9 +128,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           
-      # Update kubeconfig
-      - name: Update kubeconfig
-        run: aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
+      # # Update kubeconfig
+      # - name: Update kubeconfig
+      #   run: aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
 
       # # Deploy to EKS
       # - name: Deploy to EKS
