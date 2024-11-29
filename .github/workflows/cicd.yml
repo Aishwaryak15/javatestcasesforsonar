@@ -98,35 +98,35 @@ jobs:
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/githubrepo:${{ github.sha }}
 
   # Deployment Job
-  deploy_to_eks:
-    runs-on: ubuntu-latest
-    needs: ci  # Ensure this job runs after the CI job
-    steps:
-      - name: Set up AWS CLI and kubectl
-        run: |
-          echo "Setting up AWS CLI and kubectl"
-          apt-get update && apt-get install -y curl unzip
-          # Install AWS CLI
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          ./aws/install --bin-dir $HOME/.local/bin --install-dir $HOME/.aws-cli
-          export PATH=$HOME/.local/bin:$PATH
-          aws --version
+  # deploy_to_eks:
+  #   runs-on: ubuntu-latest
+  #   needs: ci  # Ensure this job runs after the CI job
+  #   steps:
+  #     - name: Set up AWS CLI and kubectl
+  #       run: |
+  #         echo "Setting up AWS CLI and kubectl"
+  #         apt-get update && apt-get install -y curl unzip
+  #         # Install AWS CLI
+  #         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  #         unzip awscliv2.zip
+  #         ./aws/install --bin-dir $HOME/.local/bin --install-dir $HOME/.aws-cli
+  #         export PATH=$HOME/.local/bin:$PATH
+  #         aws --version
           
-          # Install kubectl
-          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x ./kubectl
-          mv ./kubectl $HOME/.local/bin/kubectl
-          export PATH=$HOME/.local/bin:$PATH
-          kubectl version --client
+  #         # Install kubectl
+  #         curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+  #         chmod +x ./kubectl
+  #         mv ./kubectl $HOME/.local/bin/kubectl
+  #         export PATH=$HOME/.local/bin:$PATH
+  #         kubectl version --client
           
-      # Configure AWS credentials
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+  #     # Configure AWS credentials
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v3
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ secrets.AWS_REGION }}
           
       # # Update kubeconfig
       # - name: Update kubeconfig
