@@ -68,7 +68,7 @@ jobs:
           IMAGE_TAG: ${{ steps.commit.outputs.short }}
         run: |
           docker build -t demo1:${{ github.sha }} .
-          docker tag demo1:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/githubrepo:${{ github.sha }}
+          docker tag demo1:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo1:${{ github.sha }}
  
       # Run Trivy vulnerability scanner on specified Docker image
       - name: Run Trivy vulnerability scanner
