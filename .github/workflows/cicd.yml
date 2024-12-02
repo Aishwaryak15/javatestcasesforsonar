@@ -67,15 +67,15 @@ jobs:
         env:
           IMAGE_TAG: ${{ steps.commit.outputs.short }}
         run: |
-          docker build -t githubrepo:${{ github.sha }} .
-          docker tag githubrepo:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/githubrepo:${{ github.sha }}
+          docker build -t demo1:${{ github.sha }} .
+          docker tag demo1:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/githubrepo:${{ github.sha }}
  
       # Run Trivy vulnerability scanner on specified Docker image
       - name: Run Trivy vulnerability scanner
         id: trivy-scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/githubrepo:${{ github.sha }}
+          image-ref: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo1:latest
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -95,7 +95,7 @@ jobs:
       # Push Docker image to Amazon ECR
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/githubrepo:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo1:${{ github.sha }}
 
   # Deployment Job
   # deploy_to_eks:
