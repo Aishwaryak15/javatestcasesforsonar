@@ -61,16 +61,15 @@ jobs:
  
       # Authenticate AWS with Docker to interact with Amazon ECR
       - name: Login to Amazon ECR
-        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 937184064551.dkr.ecr.us-east-1.amazonaws.com
+        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
       # Build the Docker image using Dockerfile & tag it with commit SHA, & push it to ECR repository
       - name: Build Docker Image
         env:
           IMAGE_TAG: ${{ steps.commit.outputs.short }}
         run: |
-          # docker build -t demo1:${{ github.sha }} .
           docker build -t demo1 .
-          # docker tag demo1:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo1:${{ github.sha }}
-          docker tag demo1:latest 937184064551.dkr.ecr.us-east-1.amazonaws.com/demo1:latest
+          docker tag demo1:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo1:latest
+          
       # Run Trivy vulnerability scanner on specified Docker image
       - name: Run Trivy vulnerability scanner
         id: trivy-scan
@@ -96,7 +95,7 @@ jobs:
       # Push Docker image to Amazon ECR
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo1:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo1:latest
 
   # Deployment Job
   # deploy_to_eks:
