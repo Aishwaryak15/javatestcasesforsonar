@@ -36,7 +36,7 @@ jobs:
       - name: Run unit tests
         run: mvn test
  
-      # Generate code coverage report using JaCoCo
+      # Generate cde coverage report using JaCoCo
       - name: Get code coverage report
         run: mvn jacoco:report
 
