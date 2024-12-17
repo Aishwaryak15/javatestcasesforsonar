@@ -96,7 +96,7 @@ jobs:
       # Push Docker image to Amazon ECR
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo1:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/demo-private-repo:latest
 
   # Deployment Job
   # deploy_to_eks:
